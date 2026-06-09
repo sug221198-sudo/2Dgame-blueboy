@@ -24,12 +24,13 @@ public class TileManager {
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 
         getTileImage();
+
+        //TODO: CHANGE
         loadMap("/maps/worldV2.txt");
     }
 
     public void getTileImage() {
-            //tile[0] = new Tile();
-            //tile[0].image = ImageIO.read(getClass().getResourceAsStream("/tiles/grass00.png"));
+
             setup(0, "grass00", false);
             setup(1, "grass00", false);
             setup(2, "grass00", false);
@@ -41,7 +42,7 @@ public class TileManager {
             setup(8, "grass00", false);
             setup(9, "grass00", false);
 
-            //PLACEHOLDER
+            // PLACE HOLDER
             setup(10, "grass00", false);
             setup(11, "grass01", false);
             setup(12, "water00", true);
@@ -77,7 +78,9 @@ public class TileManager {
     }
 
     public void setup(int index, String imageName, boolean collision){
+
         UtilityTool uTool = new UtilityTool();
+
         try{
             tile[index] = new Tile();
             tile[index].image = ImageIO.read(getClass().getResourceAsStream("/tiles/"+ imageName + ".png"));
@@ -99,16 +102,18 @@ public class TileManager {
             int row = 0;
             while(col < gp.maxWorldCol && row < gp.maxWorldRow)
             {
-                String line = br.readLine();//read the line of text
+                String line = br.readLine();
                 while (col < gp.maxWorldCol)
                 {
-                    String numbers[] = line.split(" ");//splits this string around matches,the given regular expression
+                    String numbers[] = line.split(" ");
 
-                    int num = Integer.parseInt(numbers[col]);//切割相等
+                    int num = Integer.parseInt(numbers[col]); // 切割相等????
                     mapTileNum[col][row] = num;
                     col++;
                 }
-                if(col == gp.maxWorldCol){ col = 0; row++;}
+                if(col == gp.maxWorldCol){
+                    col = 0; row++;
+                }
             }
             br.close();
         }
@@ -124,7 +129,7 @@ public class TileManager {
         {
             int tileNum = mapTileNum[worldCol][worldRow];
 
-            //物理(x,y) [col, row] 屏幕（x*48, y*48)
+            // [col, row]  REALITY: (x,y)  SCREEN（x*48, y*48)
             int worldX = worldCol * gp.tileSize;
             int worldY = worldRow * gp.tileSize;
             int screenX = worldX - gp.player.worldX + gp.player.screenX;//到原点的具体差距

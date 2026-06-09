@@ -84,12 +84,10 @@ public class Entity //this stores variables that will be used in player, monster
     public Entity(GamePanel gp) {
         this.gp = gp;
     }
-
     public void setAction(){}
     public void damageReaction(){}
     public void speak(){
-        if(dialogues[dialogueIndex] == null)
-        {
+        if(dialogues[dialogueIndex] == null) {
             dialogueIndex = 0;
         }
         gp.ui.currentDialogue = dialogues[dialogueIndex];
@@ -110,12 +108,8 @@ public class Entity //this stores variables that will be used in player, monster
                 break;
         }
     }
-    public void use(Entity entity){
-
-    }
-    public void checkDrop(){
-
-    }
+    public void use(Entity entity){}
+    public void checkDrop(){}
     public void dropItem(Entity droppedItem){
         for(int i = 0; i < gp.obj.length; i++){
             if(gp.obj[i] == null){
@@ -148,16 +142,17 @@ public class Entity //this stores variables that will be used in player, monster
         int speed = generator.getParticleSpeed();
         int maxLife = generator.getParticleMaxLife();
 
-        Particle p1 = new Particle(gp, generator, color, size, speed, maxLife, -2, -1);
-        Particle p2 = new Particle(gp, generator, color, size, speed, maxLife, 2, -1);
-        Particle p3 = new Particle(gp, generator, color, size, speed, maxLife, -2, 1);
-        Particle p4 = new Particle(gp, generator, color, size, speed, maxLife, 2, 1);
+        Particle p1 = new Particle(gp, target, color, size, speed, maxLife, -2, -1);
+        Particle p2 = new Particle(gp, target, color, size, speed, maxLife, 2, -1);
+        Particle p3 = new Particle(gp, target, color, size, speed, maxLife, -2, 1);
+        Particle p4 = new Particle(gp, target, color, size, speed, maxLife, 2, 1);
         gp.particleList.add(p1);
         gp.particleList.add(p2);
         gp.particleList.add(p3);
         gp.particleList.add(p4);
     }
     public void update(){
+
         setAction();
 
         collisionOn = false;
@@ -296,7 +291,6 @@ public class Entity //this stores variables that will be used in player, monster
     public BufferedImage setup(String imagePath, int width, int height) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image= null;
-
         try{
             image = ImageIO.read(getClass().getResourceAsStream( imagePath + ".png"));
             image= uTool.scaledImage(image, width, height);

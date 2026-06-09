@@ -7,6 +7,7 @@ public class OBJ_Coin_Bronze extends Entity {
     GamePanel gp;
 
     public OBJ_Coin_Bronze(GamePanel gp) {
+
         super(gp);
         this.gp = gp;
 
@@ -17,8 +18,10 @@ public class OBJ_Coin_Bronze extends Entity {
     }
 
     public void use(Entity entity) {
+
         gp.playSE(1);
         gp.ui.addMessage("coin +" + value);
         gp.player.coin += value;
+
     }
 }

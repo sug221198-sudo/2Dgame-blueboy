@@ -194,13 +194,11 @@ public class Player extends Entity
                 attacking = true;
                 spriteCounter = 0;
             }
-
             attackCanceled = false;
             gp.keyH.enterPressed = false;
-
             spriteCounter++;
-            if(spriteCounter > 10)//玩家10帧更改一次
-            {
+
+            if(spriteCounter > 10) {
                 if(spriteNum == 1){ spriteNum = 2; }
                 else if(spriteNum == 2){ spriteNum = 1; }
                 spriteCounter = 0;
@@ -209,8 +207,7 @@ public class Player extends Entity
         }
         else{
             standCounter++;
-            if(standCounter == 20)
-            {
+            if(standCounter == 20) {
                 spriteNum = 1;
                 standCounter = 0;
             }
@@ -218,13 +215,12 @@ public class Player extends Entity
         if(gp.keyH.shotKeyPressed && !projectile.alive &&
                     shotAvailableCounter == 30 && projectile.haveResource(this)){
 
-            //set default coordinates, direction and user
+            //DEFAULT COORDINATES
             projectile.set(worldX, worldY, direction, true, this);
 
             //SUBTRACT THE COST (MANA AMMO ETC)
             projectile.subtractResource(this);
 
-            //add it to the list
             gp.projectileList.add(projectile);
 
             shotAvailableCounter = 0;
@@ -232,7 +228,6 @@ public class Player extends Entity
             //gp.playSE(10);
         }
 
-        // this needs to be outside of key if statement
         if(invincible){
             invincibleCounter++;
             if(invincibleCounter > 60) {
@@ -251,21 +246,18 @@ public class Player extends Entity
         }
     }
     public void attacking(){
+
         spriteCounter++;
         if(spriteCounter <= 5){
             spriteNum = 1;
         }
         if(spriteCounter > 5 && spriteCounter <= 25){
             spriteNum = 2;
-
-
-            //save the current worldX, worldY, solidArea
             int currentWorldX = worldX;
             int currentWorldY = worldY;
             int solidAreaWidth = solidArea.width;
             int solidAreaHeight = solidArea.height;
 
-            //adjust player worldX,Y for the attack Area
             switch(direction){
                 case "up": worldY -= attackArea.height; break;
                 case "down": worldY += attackArea.height; break;
@@ -273,18 +265,18 @@ public class Player extends Entity
                 case"right": worldX += attackArea.width; break;
             }
 
-            //attack area become solid
+            //ATTACK SOLID
             solidArea.width = attackArea.width;
             solidArea.height = attackArea.height;
 
-            //check monster collision with the update worldx, worldy and solidArea
+            //CHECK THE COLLISION
             int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
             damageMonster(monsterIndex, attack);
 
             int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
             damageInteractiveTile(iTileIndex);
 
-            //after collision, restore the solidArea
+            // RESTORE
             worldX = currentWorldX;
             worldY = currentWorldY;
             solidArea.width = solidAreaWidth;
@@ -296,16 +288,19 @@ public class Player extends Entity
             spriteCounter = 0;
             attacking = false;
         }
+
     }
     public void pickUpObject(int i) {
 
         if (i != 999) {
+
             //PICK ONLY ITEMS
             if(gp.obj[i].type == type_pickupOnly){
 
                 gp.obj[i].use(this);
                 gp.obj[i] = null;
             }
+
             //INVENTORY OBJECTS
             else {
                 String text;
@@ -322,6 +317,7 @@ public class Player extends Entity
         }
     }
     public void interactNPC(int i) {
+
         if(keyH.enterPressed){
             if(i != 999){
                 attackCanceled = true;
@@ -329,8 +325,10 @@ public class Player extends Entity
                 gp.npc[i].speak();
             }
         }
+
     }
     public void contactMonster(int i) {
+
         if(i != 999){
             if(!invincible && !gp.monster[i].dying){
                 gp.playSE(6);
@@ -345,6 +343,7 @@ public class Player extends Entity
         }
     }
     public void damageMonster(int i, int attack) {
+
         if(i != 999){
             if(!gp.monster[i].invincible){
                 gp.playSE(5);
@@ -378,7 +377,6 @@ public class Player extends Entity
             gp.iTile[i].life--;
             gp.iTile[i].invincible = true;
 
-            //generate particle
             generateParticles(gp.iTile[i], gp.iTile[i]);
 
             if(gp.iTile[i].life == 0){ gp.iTile[i] = gp.iTile[i].getDestroyedForm();}

@@ -13,7 +13,6 @@ public class AssetSetter {
     {
         this.gp = gp;
     }
-
     public void setObject() {
 
         int i = 0;
@@ -65,10 +64,8 @@ public class AssetSetter {
         gp.monster[i] = new MON_GreenSlime(gp);
         gp.monster[i].worldX = gp.tileSize * 38;
         gp.monster[i].worldY = gp.tileSize * 42;
-        i++;
     }
     public void setInteractiveTile(){
-
         int i = 0;
         gp.iTile[i] = new IT_DryTree(gp,27,12);
         i++;

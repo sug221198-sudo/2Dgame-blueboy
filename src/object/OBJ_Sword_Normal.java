@@ -5,6 +5,7 @@ import entity.Entity;
 
 public class OBJ_Sword_Normal extends Entity {
     public OBJ_Sword_Normal(GamePanel gp) {
+
         super(gp);
 
         type = type_sword;

@@ -18,11 +18,13 @@ public class OBJ_Rock extends Projectile{
         maxLife = 80;
         life = maxLife;
         attack = 2;
-        useCost = 1;//1 manner to release
+        useCost = 1;// 1 manner to release
         alive = false;
+
         getImage();
     }
     public void getImage(){
+
         up1 = setup("/projectile/rock_down_1", gp.tileSize, gp.tileSize);
         up2 = setup("/projectile/rock_down_1", gp.tileSize, gp.tileSize);
         down1 = setup("/projectile/rock_down_1", gp.tileSize, gp.tileSize);
@@ -31,6 +33,7 @@ public class OBJ_Rock extends Projectile{
         left2 = setup("/projectile/rock_down_1", gp.tileSize, gp.tileSize);
         right1 = setup("/projectile/rock_down_1", gp.tileSize, gp.tileSize);
         right2 = setup("/projectile/rock_down_1", gp.tileSize, gp.tileSize);
+
     }
     public boolean haveResource(Entity user){
 

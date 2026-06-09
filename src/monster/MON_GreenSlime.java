@@ -74,10 +74,11 @@ public class MON_GreenSlime extends Entity {
 
     }
     public void checkDrop(){
-        //CAST A DIE
+
+        // CAST A DIE
         int i = new Random().nextInt(199)+1;
 
-        //SET THE MONSTER DROP
+        // SET THE MONSTER DROP
         if(i<50){
             dropItem(new OBJ_Coin_Bronze(gp));
         }

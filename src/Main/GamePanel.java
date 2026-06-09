@@ -2,11 +2,13 @@ package Main;
 
 import entity.Entity;
 import entity.Player;
+import tile.Tile;
 import tile.TileManager;
 import tile_interactive.InteractiveTile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,21 +19,19 @@ public class GamePanel extends JPanel implements Runnable
     //SCREEN SETTING
     final int originalTileSize = 16;//16 x 16 size
     final int scale = 3;
-
-    /*
-    set player's default position--用来测试
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4; */
     public final int tileSize = originalTileSize * scale;//48 x 48 tile
-    public final int maxScreenCol = 16;
-    public final int maxScreenRow = 12;
+    public final int maxScreenCol = 30 ;
+    public final int maxScreenRow = 20 ;
 
-    //Window mode
+    //WINDOW MODE
     public final int screenWidth = tileSize * maxScreenCol;//760 pixels
     public final int screenHeight = tileSize * maxScreenRow;//48 * 12 pixels
 
-    //Full screen
+    //FULL SCREEN
+    int screenWidth2 = screenWidth;
+    int screenHeight2 = screenHeight;
+    BufferedImage tempScreen;
+    Graphics2D g2;
 
     //WORLD SETTING
     public final int maxWorldCol = 50;
@@ -51,7 +51,6 @@ public class GamePanel extends JPanel implements Runnable
     public AssetSetter aSetter = new AssetSetter(this);
     public UI ui = new UI(this);
     public EventHandler eHandler = new EventHandler(this);
-    //启动和停止 thread 线程
     Thread gameThread;
 
     //ENTITY  AND OBJECT
@@ -65,7 +64,6 @@ public class GamePanel extends JPanel implements Runnable
     ArrayList<Entity> entityList = new ArrayList<>();
 
     //GAME STATE
-    //体现很多屏幕界面
     public int gameState;
     public final int titleState = 0;
     public final int playState = 1;
@@ -73,62 +71,44 @@ public class GamePanel extends JPanel implements Runnable
     public final int dialogueState = 3;
     public final int characterState = 4;
 
-
     public GamePanel() {
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));/*setPreferredSize(new Dimension(width, height))
-                                                                         = set the size of this class(JPanel)*/
-        this.setBackground(Color.BLACK);
-        this.setDoubleBuffered(true);//Canvas/双重缓冲函数作为默认值，更好地渲染
 
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setBackground(Color.BLACK);
+        this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);//this game panel can be "focused" to receive key input
+        setFullScreen();
+
+    }
+    public void setFullScreen() {
+
+        //GET LOCAL SCREEN DEVICE
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        gd.setFullScreenWindow(Main.window);
+
+        //GET FULL SCREEN WIDTH AND HEIGHT
+        screenHeight2 = Main.window.getHeight();
+        screenWidth2 = Main.window.getWidth();
     }
     public void setupGame() {
+
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
         aSetter.setInteractiveTile();
-        //playMusic(0);
         gameState = titleState;
+
+        tempScreen = new BufferedImage(screenWidth2, screenHeight2, BufferedImage.TYPE_INT_RGB);
+        g2 = (Graphics2D) tempScreen.getGraphics();
 
     }
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
     }
-    /*
-    public void run()//启动thread所要单独用的run方法
-    {
-        double drawInterval = 100000100 / FPS;
-        double nextDrawTime = System.nanoTime() + drawInterval;
 
-        while(gameThread != null)
-        {
-            //long currentTime = System.nanoTime();//用纳秒来检查当前的系统时间
-            //System.out.println("current time"+ currentTime);
-
-            //step 1. Update:update information such as character position
-            update();
-            //step 2. Draw: draw the screen with the updated information
-            repaint();//call paintComponent
-
-
-            try{
-                double remainingTime = nextDrawTime - System.nanoTime();
-                remainingTime = remainingTime / 1000000;//看sleep里面long的单位是million
-
-                if(remainingTime < 0){ remainingTime = 0;}
-                Thread.sleep((long)remainingTime);
-
-                nextDrawTime += drawInterval;
-            }
-            catch(InterruptedException e){
-                e.printStackTrace();
-            }
-
-        }
-    }
-    */
     @Override
     public void run() {
         double drawInterval  = 1000_000_000 / FPS;
@@ -137,21 +117,20 @@ public class GamePanel extends JPanel implements Runnable
         long currentTime;
         long timer = 0;
         int drawCount = 0;
-        while(gameThread != null)
-        {
+        while(gameThread != null) {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             timer += (currentTime - lastTime);
             lastTime = currentTime;
-            if (delta >= 1)
-            {
+            if (delta >= 1) {
                 update();
-                repaint();
+                //repaint();
+                drawToTempScreen();//draw everything to the buffer image
+                drawToScreen();//draw the buffered image to the screen
                 delta--;
                 drawCount++;
             }
-            if(timer >= 1000000000)
-            {
+            if(timer >= 1000000000) {
                 System.out.println("FPS:" + drawCount);
                 drawCount = 0;
                 timer = 0;
@@ -159,10 +138,8 @@ public class GamePanel extends JPanel implements Runnable
         }
     }
     public void update() {
-        if(gameState == playState)
-        {
+        if(gameState == playState) {
             player.update();
-
             for(int i = 0; i < npc.length; i++) {
                 if(npc[i] != null) {
                     npc[i].update();
@@ -206,13 +183,10 @@ public class GamePanel extends JPanel implements Runnable
             }
         }
         if(gameState == pauseState) {
-            //暂时不更新用户信息
+
         }
     }
-    public void paintComponent(Graphics g){//graphics: a class that has many functions to draw objects on the screen
-
-        super.paintComponent(g);
-        Graphics2D g2 =  (Graphics2D) g;//把g转换成2d形式
+    public void drawToTempScreen() {
 
         //DEBUG
         long drawStart = 0;
@@ -223,10 +197,11 @@ public class GamePanel extends JPanel implements Runnable
         if(gameState == titleState) {
             ui.draw(g2);
         }
-        //Others
+        //OTHERS
         else{
+
             //TILE
-            tileM.draw(g2);//画面一定要在player之前 要不然就覆盖人物了
+            tileM.draw(g2);
 
             //INTERACTIVE TILE
             for(int i = 0; i < iTile.length; i++) {
@@ -237,7 +212,6 @@ public class GamePanel extends JPanel implements Runnable
 
             //ADD ENTITY TO THE LIST
             entityList.add(player);
-
             for(int i = 0; i < npc.length; i++) {
                 if(npc[i] != null) {
                     entityList.add(npc[i]);
@@ -279,14 +253,13 @@ public class GamePanel extends JPanel implements Runnable
             for(int i = 0; i < entityList.size(); i++) {
                 entityList.get(i).draw(g2);
             }
+
             //EMPTY ENTITY LIST
             entityList.clear();
 
             //UI
             ui.draw(g2);
-
         }
-
 
         //DEBUG
         if(keyH.showDebugText) {
@@ -307,13 +280,19 @@ public class GamePanel extends JPanel implements Runnable
             g2.drawString("Draw time: " + passed, x, y);
             System.out.println("Draw time: " + passed);
         }
+    }
+    public void drawToScreen() {
 
-        g2.dispose();//dispose of this graphics context and release any system resource that is using
+        Graphics g  = getGraphics();
+        g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
+
     }
     public void playMusic(int i) {
+
         music.setFile(i);
         music.play();
         music.loop();
+
     }
     public void stopMusic() {
         music.stop();

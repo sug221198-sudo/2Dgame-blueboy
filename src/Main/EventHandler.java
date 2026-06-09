@@ -4,10 +4,7 @@ import java.awt.*;
 
 public class EventHandler {
     GamePanel gp;
-    //Rectangle eventRect;
     EventRect eventRect[][];
-    //int eventRectDefaultX, eventRectDefaultY;
-
     int previousEventX, previousEventY;
     boolean canTouchEvent = true;
 
@@ -35,7 +32,8 @@ public class EventHandler {
 
     }
     public void checkEvent(){
-        //check if player character is more than 1 tile away from the last event
+
+        // IF DISTANCE > 1 TILE, RERUN THIS METHOD
         int xDistance = Math.abs(gp.player.worldX - previousEventX);
         int tDistance = Math.abs(gp.player.worldY - previousEventY);
         int distance = Math.max(xDistance, tDistance);
@@ -46,7 +44,6 @@ public class EventHandler {
         if(canTouchEvent){
             if(hit(27, 16, "right")==true){ damagePit(27,16, gp.dialogueState);}
             if(hit(23, 19, "any")==true){ damagePit(27,16, gp.dialogueState);}
-            //if(hit(27, 16, "right")==true){ teleport(gp.dialogueState);}
             if(hit(23,12,"up")==true){ healingPool(23,12, gp.dialogueState);}
         }
 
@@ -82,9 +79,8 @@ public class EventHandler {
     }
     public void damagePit(int col, int row, int gameState){
         gp.gameState = gameState;
-        gp.ui.currentDialogue = "You fall into a PIT !!!";
+        gp.ui.currentDialogue = "You fall into a pit !!!";
         gp.player.life -= 1;
-        //eventRect[col][row].eventDone = true;
         canTouchEvent = false;
 
     }

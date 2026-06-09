@@ -15,16 +15,10 @@ public class UI {
     Graphics2D g2;
     Font maruMonica, purisaB;
     BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank;
-    //1 version： BufferedImage keyImage;
-    public boolean messageOn = false;
-//    public String message = "";
-//    int messageCounter = 0;
     ArrayList<String> message =  new ArrayList<>();
     ArrayList<Integer> messageCounter = new ArrayList<>();
+    public boolean messageOn = false;
     public boolean gameFinished = false;
-
-    //double playTime;
-    //DecimalFormat dFormat = new DecimalFormat("#0.00");
 
     public String currentDialogue = "";
     public int commandNum = 0;
@@ -47,6 +41,7 @@ public class UI {
             //TODO AUTO-generated catch block
             e.printStackTrace();
         }
+
         //CREATE HUD OBJECT
         Entity heart = new OBJ_Heart(gp);
         heart_full = heart.image;
@@ -56,11 +51,8 @@ public class UI {
         crystal_full = crystal.image;
         crystal_blank = crystal.image2;
 
-
-        //1 version:OBJ_Key key = new OBJ_Key(gp);
-        //1 version: keyImage = key.image;
     }
-    //notification
+    //NOTIFICATIONS
     public void addMessage(String text) {
         System.err.println("addMessage");
         message.add(text);
@@ -68,29 +60,23 @@ public class UI {
     }
     public void draw(Graphics2D g2) {
         this.g2 = g2;
-
         g2.setFont(maruMonica);
-        //g2.setFont(purisaB);
-        //将锯齿字体变得稍微平和一点
-        //g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        //g2.setColor(Color.white);
-
-        //title state
+        // TITLE STATE
         if(gp.gameState == gp.titleState) {
             drawTitleScreen();
         }
-        //play state
+        // PLAY STATE
         else if(gp.gameState == gp.playState){
             drawPlayerLife();
             drawMessage();
         }
-        //pause state
+        // PAUSE STATE
         else if(gp.gameState == gp.pauseState){
             drawPlayerLife();
             drawPauseScreen();
         }
-        //dialogue state
+        // DIALOGUE STATE
         else if(gp.gameState == gp.dialogueState){
             drawPlayerLife();
             drawDialogueState();
@@ -103,7 +89,7 @@ public class UI {
     }
     public void drawPlayerLife() {
 
-        //DRAW BLANK HEART
+        // DRAW BLANK HEART
         int x = gp.tileSize / 2;
         int y = gp.tileSize / 2;
         int i = 0;
@@ -112,7 +98,8 @@ public class UI {
             i++;
             x += gp.tileSize;
         }
-        //DRAW CURRENT LIFE
+
+        // DRAW CURRENT LIFE
         x = gp.tileSize / 2;
         y = gp.tileSize / 2;
         i = 0;
@@ -126,7 +113,7 @@ public class UI {
             x += gp.tileSize;
         }
 
-        //DRAW MAX MANA
+        // DRAW MAX MANA
         x = (gp.tileSize / 2) - 5;
         y = (int)(gp.tileSize * 1.5);
         i = 0;
@@ -135,7 +122,8 @@ public class UI {
             i++;
             x += 35;
         }
-        //DRAW MANA
+
+        // DRAW MANA
         x = (gp.tileSize / 2) - 5;
         y = (int)(gp.tileSize * 1.5);
         i = 0;
@@ -144,7 +132,6 @@ public class UI {
             i++;
             x += 35;
         }
-
     }
     public void drawMessage() {
         System.out.println("drawMessage"+message.size());
@@ -173,30 +160,32 @@ public class UI {
     }
     public void drawTitleScreen(){
             if(gp.ui.titleScreenState == 0){
-                //background color
+
+                // BACKGROUND COLOR
                 g2.setColor(Color.BLACK);
                 g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
-                //Title Name
+                // TITLE NAME
                 g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96f));
                 String text = "Blue Boy Adventure";
                 int x = getXforCenteredText(text);
                 int y = gp.tileSize * 3;
 
-                //shadow
+                // SHADOW
                 g2.setColor(Color.gray);
                 g2.drawString(text, x+4, y+4);
-                //title main color
+
+                // TITLE MAIN COLOR
                 g2.setColor(Color.white);
                 g2.drawString(text, x, y);
 
-                //blue boy image
+                // BLUE BOY IMAGE
                 x = gp.screenWidth/2 - (gp.tileSize*2) / 2;
                 y += gp.tileSize * 2;
                 g2.drawImage(gp.player.down1, x, y, gp.tileSize * 2, gp.tileSize * 2, null);
                 g2.drawImage(gp.npc[0].down1, x + 100, y, gp.tileSize * 2, gp.tileSize * 2, null);
 
-                //menu
+                // MENU
                 g2.setFont(g2.getFont().deriveFont(Font.BOLD, 36f));
                 text = "NEW GAME";
                 x = getXforCenteredText(text) / 3;
@@ -223,7 +212,8 @@ public class UI {
                 }
 
             }
-            else if(titleScreenState == 1){
+/*
+               else if(titleScreenState == 1){
 
                 //class selection screen
                 g2.setColor(Color.white);
@@ -266,6 +256,7 @@ public class UI {
                     g2.drawString(">", x-gp.tileSize, y);
                 }
             }
+*/
 
     }
     public void drawPauseScreen(){
@@ -277,7 +268,8 @@ public class UI {
         g2.drawString(text, x, y);
     }
     public void drawDialogueState(){
-        //dialogue window
+
+        // DIALOGUE WINDOW
         int x, y ,width, height;
         x = gp.tileSize * 2;
         y = gp.tileSize / 2;
@@ -294,14 +286,14 @@ public class UI {
         }
     }
     public void drawCharacterScreen(){
-        //CREATE A FRAME
+        // CREATE A FRAME
         final int frameX = gp.tileSize * 2;
         final int frameY = gp.tileSize;
         final int frameWidth = gp.tileSize * 5;
         final int frameHeight =  gp.tileSize * 10;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
-        //TEXT
+        // TEXT
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(32F));
 
@@ -309,7 +301,7 @@ public class UI {
         int textY = frameY + gp.tileSize;
         final int lineHeight = 35;
 
-        //NAMES
+        // NAMES
         g2.drawString("Level", textX, textY);
         textY += lineHeight;
         g2.drawString("Life", textX, textY);
@@ -335,9 +327,8 @@ public class UI {
         g2.drawString("Shield", textX, textY);
         textY += lineHeight;
 
-        //VALUES
+        // VALUES
         int tailX = (frameX + frameWidth) - 30;
-        //RESET textY
         textY = frameY + gp.tileSize;
         String value;
 
@@ -397,24 +388,24 @@ public class UI {
     }
     public void drawInventory() {
 
-        //FRAME
+        // FRAME
         int frameX = gp.tileSize * 9;
         int frameY = gp.tileSize;
         int frameWidth = gp.tileSize * 6;
         int frameHeight = gp.tileSize * 5;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
-        //SLOT
+        // SLOT
         final int slotXstart = frameX + 20;
         final int slotYstart = frameY + 20;
         int slotX = slotXstart;
         int slotY = slotYstart;
         int slotSize = gp.tileSize + 3;
 
-        //DRAW PLAYER'S ITEMS
+        // DRAW PLAYER'S ITEMS
         for(int i = 0; i < gp.player.inventory.size(); i++){
 
-            //EQUIP CURSOR
+            // EQUIP CURSOR
             if(gp.player.inventory.get(i) == gp.player.currentWeapon ||
                     gp.player.inventory.get(i) == gp.player.currentShield){
                 g2.setColor(new Color(240, 190, 90, 95));
@@ -430,24 +421,25 @@ public class UI {
                 slotY += slotSize;
             }
         }
-        //CURSOR
+        // CURSOR
         int cursorX = slotXstart + (slotSize * slotCol);
         int cursorY =  slotYstart + (slotSize  * slotRow);
         int cursorWidth = gp.tileSize;
         int cursorHeight = gp.tileSize;
 
-        //DRAW CURSOR
+        // DRAW CURSOR
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
 
-        //DESCRIPTION FRAME
+        // DESCRIPTION FRAME
         int dFrameX = frameX;
         int dFrameY = frameY + frameHeight;
         int dFrameWidth = frameWidth;
         int dFrameHeight = gp.tileSize * 3;
         drawSubWindow(dFrameX, dFrameY, dFrameWidth, dFrameHeight);
-        //DRAW DESCRIPTION TEXT
+
+        // DRAW DESCRIPTION TEXT
         int textX = dFrameX + 20;
         int textY = dFrameY + gp.tileSize;
         g2.setFont(g2.getFont().deriveFont(28F));

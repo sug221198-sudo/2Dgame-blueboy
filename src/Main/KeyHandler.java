@@ -21,27 +21,27 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();//有很多example of associated keycode
 
-        //title state
+        // TITLE STATE
         if (gp.gameState == gp.titleState) {
             titleState(code);
         }
 
-        //play state
+        // PLAY STATE
         else if (gp.gameState == gp.playState) {
             playState(code);
         }
 
-        //pause state
+        // PAUSE STATE
         else if (gp.gameState == gp.pauseState) {
             pauseState(code);
         }
 
-        //dialogue state
+        // DIALOGUE STATE
         else if (gp.gameState == gp.dialogueState) {
             dialogueState(code);
         }
 
-        //character state
+        // CHARACTER STATE
         else if (gp.gameState == gp.characterState) {
             characterState(code);
         }
@@ -125,7 +125,7 @@ public class KeyHandler implements KeyListener {
             shotKeyPressed = true;
         }
 
-        //change game state
+        // CHANGE THE STATE
         if (code == KeyEvent.VK_ESCAPE) {
             gp.gameState = gp.pauseState;
         }
@@ -142,7 +142,7 @@ public class KeyHandler implements KeyListener {
             }
         }
         if (code == KeyEvent.VK_R) {
-            gp.tileM.loadMap("/maps/worldV2.txt");//更改地图的同时按下r键就可以刷新 不用rerun
+            gp.tileM.loadMap("/maps/worldV2.txt");
         }
     }
     public void pauseState(int code) {
@@ -193,7 +193,7 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        int code = e.getKeyCode();//有很多example of associated keycode
+        int code = e.getKeyCode();
         if (code == KeyEvent.VK_W) {
             upPressed = false;
         }

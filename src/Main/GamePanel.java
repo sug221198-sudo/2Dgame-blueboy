@@ -20,24 +20,25 @@ public class GamePanel extends JPanel implements Runnable
     final int originalTileSize = 16;//16 x 16 size
     final int scale = 3;
     public final int tileSize = originalTileSize * scale;//48 x 48 tile
-    public final int maxScreenCol = 30 ;
-    public final int maxScreenRow = 20 ;
+    public final int maxScreenCol = 16 ;
+    public final int maxScreenRow = 12 ;
 
     //WINDOW MODE
     public final int screenWidth = tileSize * maxScreenCol;//760 pixels
     public final int screenHeight = tileSize * maxScreenRow;//48 * 12 pixels
-
-    //FULL SCREEN
-    int screenWidth2 = screenWidth;
-    int screenHeight2 = screenHeight;
-    BufferedImage tempScreen;
-    Graphics2D g2;
 
     //WORLD SETTING
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
     public final int worldWidth = tileSize * maxWorldCol;
     public final int worldHeight = tileSize * maxWorldRow;
+
+    //FULL SCREEN
+    int screenWidth2 = screenWidth;
+    int screenHeight2 = screenHeight;
+    BufferedImage tempScreen;
+    Graphics2D g2;
+    public boolean fullScreenOn = false;
 
     //FPS
     int FPS = 60;
@@ -70,6 +71,7 @@ public class GamePanel extends JPanel implements Runnable
     public final int pauseState = 2;
     public final int dialogueState = 3;
     public final int characterState = 4;
+    public final int optionState = 5;
 
     public GamePanel() {
 
@@ -78,7 +80,6 @@ public class GamePanel extends JPanel implements Runnable
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);//this game panel can be "focused" to receive key input
-        setFullScreen();
 
     }
     public void setFullScreen() {

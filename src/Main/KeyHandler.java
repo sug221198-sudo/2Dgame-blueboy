@@ -5,7 +5,8 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     public GamePanel gp;
-    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeyPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeyPressed ;
+    // DEBUG
     boolean showDebugText = false;
 
     public KeyHandler(GamePanel gp) {
@@ -44,6 +45,11 @@ public class KeyHandler implements KeyListener {
         // CHARACTER STATE
         else if (gp.gameState == gp.characterState) {
             characterState(code);
+        }
+
+        // OPTION STATE
+        else if (gp.gameState == gp.optionState) {
+            optionState(code);
         }
     }
     public void titleState(int code) {
@@ -118,19 +124,20 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D) {
             rightPressed = true;
         }
-        if (code == KeyEvent.VK_SPACE) {
+        if (code == KeyEvent.VK_P) {
+            gp.gameState = gp.pauseState;
+        }
+        if (code == KeyEvent.VK_C) {
+            gp.gameState = gp.characterState;
+        }
+        if (code == KeyEvent.VK_ENTER) {
             enterPressed = true;
         }
         if (code == KeyEvent.VK_F) {
             shotKeyPressed = true;
         }
-
-        // CHANGE THE STATE
         if (code == KeyEvent.VK_ESCAPE) {
-            gp.gameState = gp.pauseState;
-        }
-        if (code == KeyEvent.VK_C) {
-            gp.gameState = gp.characterState;
+            gp.gameState = gp.optionState;
         }
 
         //DEBUG
@@ -186,8 +193,35 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_C){
             gp.gameState = gp.playState;
         }
-        if(code == KeyEvent.VK_SPACE){
+        if(code == KeyEvent.VK_ENTER){
             gp.player.selectItem();
+        }
+    }
+    // OPTION STATE
+    public void optionState(int code) {
+        if (code == KeyEvent.VK_ESCAPE) {
+            gp.gameState = gp.playState;
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            enterPressed = true;
+        }
+        int maxCommandNum = 0;
+        switch(maxCommandNum){
+            case 0: maxCommandNum = 5; break;
+        }
+        if (code == KeyEvent.VK_W) {
+            gp.ui.commandNum--;
+            gp.playSE(9);
+            if (gp.ui.commandNum < 0) {
+                gp.ui.commandNum = maxCommandNum;
+            }
+        }
+        if (code == KeyEvent.VK_S) {
+            gp.ui.commandNum++;
+            gp.playSE(9);
+            if (gp.ui.commandNum > maxCommandNum) {
+                gp.ui.commandNum = 0;
+            }
         }
     }
 

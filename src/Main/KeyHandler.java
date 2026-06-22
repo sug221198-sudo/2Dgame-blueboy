@@ -68,7 +68,7 @@ public class KeyHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_SPACE) {
                 if (gp.ui.commandNum == 0) {
-                    gp.ui.titleScreenState = 1;
+                    gp.gameState = gp.playState;
                     gp.playMusic(0);
                 }
                 if (gp.ui.commandNum == 1) {
@@ -76,37 +76,6 @@ public class KeyHandler implements KeyListener {
                 }
                 if (gp.ui.commandNum == 2) {
                     System.exit(0);
-                }
-            }
-        }
-        else if (gp.ui.titleScreenState == 1) {
-            if (code == KeyEvent.VK_W) {
-                gp.ui.commandNum--;
-                if (gp.ui.commandNum < 0) {
-                    gp.ui.commandNum = 3;
-                }
-            }
-            if (code == KeyEvent.VK_S) {
-                gp.ui.commandNum++;
-                if (gp.ui.commandNum > 3) {
-                    gp.ui.commandNum = 0;
-                }
-            }
-            if (code == KeyEvent.VK_SPACE) {
-                if (gp.ui.commandNum == 0) {
-                    System.out.println("do some fighter specific stuff");
-                    gp.gameState = gp.playState;
-                }
-                if (gp.ui.commandNum == 1) {
-                    System.out.println("do some thief specific stuff");
-                    gp.gameState = gp.playState;
-                }
-                if (gp.ui.commandNum == 2) {
-                    System.out.println("do some sorcerer specific stuff");
-                    gp.gameState = gp.playState;
-                }
-                if (gp.ui.commandNum == 3) {
-                    gp.ui.titleScreenState = 0;
                 }
             }
         }
@@ -208,6 +177,7 @@ public class KeyHandler implements KeyListener {
         int maxCommandNum = 0;
         switch(maxCommandNum){
             case 0: maxCommandNum = 5; break;
+            case 3: maxCommandNum = 1; break;
         }
         if (code == KeyEvent.VK_W) {
             gp.ui.commandNum--;
@@ -221,6 +191,32 @@ public class KeyHandler implements KeyListener {
             gp.playSE(9);
             if (gp.ui.commandNum > maxCommandNum) {
                 gp.ui.commandNum = 0;
+            }
+        }
+        if(code == KeyEvent.VK_A) {
+            if(gp.ui.subState == 0){
+                if(gp.ui.commandNum == 1 && gp.music.volumeScale > 0){
+                    gp.music.volumeScale--;
+                    gp.music.checkVolume();
+                    gp.playSE(9);
+                }
+                if(gp.ui.commandNum == 2 && gp.se.volumeScale > 0){
+                    gp.se.volumeScale--;
+                    gp.playSE(9);
+                }
+            }
+        }
+        if(code == KeyEvent.VK_D) {
+            if(gp.ui.subState == 0){
+                if(gp.ui.commandNum == 1 && gp.music.volumeScale < 5){
+                    gp.music.volumeScale++;
+                    gp.music.checkVolume();
+                    gp.playSE(9);
+                }
+                if(gp.ui.commandNum == 2 && gp.se.volumeScale < 5){
+                    gp.se.volumeScale++;
+                    gp.playSE(9);
+                }
             }
         }
     }

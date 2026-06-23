@@ -6,8 +6,8 @@ public class Main {
 
     public static JFrame window;
     public static void main(String[] args) {
-        window = new JFrame();
 
+        window = new JFrame();
         //properly close when user clicks "x" button
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
@@ -17,6 +17,11 @@ public class Main {
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
+
+        gamePanel.config.loadConfig();
+        if(gamePanel.fullScreenOn){
+            window.setUndecorated(true);
+        }
 
         window.pack();
 

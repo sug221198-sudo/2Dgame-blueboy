@@ -52,6 +52,7 @@ public class GamePanel extends JPanel implements Runnable
     public AssetSetter aSetter = new AssetSetter(this);
     public UI ui = new UI(this);
     public EventHandler eHandler = new EventHandler(this);
+    Config config = new Config(this);
     Thread gameThread;
 
     //ENTITY  AND OBJECT
@@ -82,17 +83,6 @@ public class GamePanel extends JPanel implements Runnable
         this.setFocusable(true);//this game panel can be "focused" to receive key input
 
     }
-    public void setFullScreen() {
-
-        //GET LOCAL SCREEN DEVICE
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        gd.setFullScreenWindow(Main.window);
-
-        //GET FULL SCREEN WIDTH AND HEIGHT
-        screenHeight2 = Main.window.getHeight();
-        screenWidth2 = Main.window.getWidth();
-    }
     public void setupGame() {
 
         aSetter.setObject();
@@ -104,6 +94,21 @@ public class GamePanel extends JPanel implements Runnable
         tempScreen = new BufferedImage(screenWidth2, screenHeight2, BufferedImage.TYPE_INT_RGB);
         g2 = (Graphics2D) tempScreen.getGraphics();
 
+        if(fullScreenOn){
+            setFullScreen();
+        }
+
+    }
+    public void setFullScreen() {
+
+        //GET LOCAL SCREEN DEVICE
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        gd.setFullScreenWindow(Main.window);
+
+        //GET FULL SCREEN WIDTH AND HEIGHT
+        screenHeight2 = Main.window.getHeight();
+        screenWidth2 = Main.window.getWidth();
     }
     public void startGameThread() {
         gameThread = new Thread(this);

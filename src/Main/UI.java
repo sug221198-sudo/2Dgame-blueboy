@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import static java.awt.Font.BOLD;
+
 public class UI {
     GamePanel gp;
     Graphics2D g2;
@@ -90,6 +92,10 @@ public class UI {
         if(gp.gameState == gp.optionState){
             drawOptionsScreen();
         }
+        // GAME OVER STATE
+        if(gp.gameState == gp.gameOverState){
+            drawGameOverScreen();
+        }
 
     }
     public void drawPlayerLife() {
@@ -142,7 +148,7 @@ public class UI {
         System.out.println("drawMessage"+message.size());
         int messageX = gp.tileSize;
         int messageY = gp.tileSize * 4;
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
+        g2.setFont(g2.getFont().deriveFont(BOLD, 32F));
 
         for(int i = 0; i < message.size(); i++){
             if(message.get(i) != null){
@@ -171,7 +177,7 @@ public class UI {
                 g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
                 // TITLE NAME
-                g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96f));
+                g2.setFont(g2.getFont().deriveFont(BOLD, 96f));
                 String text = "Blue Boy Adventure";
                 int x = getXforCenteredText(text);
                 int y = gp.tileSize * 3;
@@ -191,7 +197,7 @@ public class UI {
                 g2.drawImage(gp.npc[0].down1, x + 100, y, gp.tileSize * 2, gp.tileSize * 2, null);
 
                 // MENU
-                g2.setFont(g2.getFont().deriveFont(Font.BOLD, 36f));
+                g2.setFont(g2.getFont().deriveFont(BOLD, 36f));
                 text = "NEW GAME";
                 x = getXforCenteredText(text) / 3;
                 y += gp.tileSize;
@@ -457,6 +463,47 @@ public class UI {
                 textY += 32;
             }
         }
+    }
+    public void drawGameOverScreen() {
+
+        g2.setColor(new Color(0, 0,0, 150));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        int x;
+        int y;
+        String text;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD,110f));
+
+        text = "Game Over";
+
+        // Shadow
+        g2.setColor(Color.black);
+        x = getXforCenteredText(text);
+        y = gp.tileSize*4;
+        g2.drawString(text, x, y);
+        // Main
+        g2.setColor(Color.white);
+        g2.drawString(text, x-4, y-4);
+
+        // Retry
+        g2.setFont(g2.getFont().deriveFont(50f));
+        text = "Retry";
+        x = getXforCenteredText(text);
+        y += gp.tileSize*4;
+        g2.drawString(text, x, y);
+        if(commandNum == 0){
+            g2.drawString(">", x-40, y);
+        }
+
+        // Back to the title screen
+        text = "Quit";
+        x = getXforCenteredText(text);
+        y += 55;
+        g2.drawString(text, x, y);
+        if(commandNum == 1){
+            g2.drawString(">", x-40, y);
+        }
+
     }
     public void drawOptionsScreen() {
         g2.setColor(Color.white);
